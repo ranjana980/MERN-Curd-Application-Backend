@@ -22,7 +22,7 @@ mongoos.connect('mongodb://localhost:27017/testapp',
 });
 
 app.use(cors({
-  origin: 'http://localhost:3000',"https://mern-curd-application-frontend.vercel.app/"
+  origin: "https://mern-curd-application-frontend.vercel.app/"
 }))
 
 app.use('/api/employee',EmployeeRoute)
