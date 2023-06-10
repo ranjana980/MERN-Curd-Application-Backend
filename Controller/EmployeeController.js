@@ -4,38 +4,39 @@ const Employee = require('../models/employee')
 const Validation = require('../Validation/formValid')
 
 const index = async (req, res) => {
-    const totalCount = await Employee.count()
-    if(req.body.search=="" || req.body.search==undefined ||req.body.search==null){
-        Employee.find().skip(req.body.pageNumber*10).limit(10)
-        .then(response => {
-            res.json({
-                code: 200,
-                msg: response,
-                total:totalCount
+    res.send('Getting data successfully')
+    // const totalCount = await Employee.count()
+    // if(req.body.search=="" || req.body.search==undefined ||req.body.search==null){
+    //     Employee.find().skip(req.body.pageNumber*10).limit(10)
+    //     .then(response => {
+    //         res.json({
+    //             code: 200,
+    //             msg: response,
+    //             total:totalCount
                 
-            })
+    //         })
             
-        })
-        .catch(error => {
-            res.json({
-                msg: 'An error Occured'
-            })
-        })
+    //     })
+    //     .catch(error => {
+    //         res.json({
+    //             msg: 'An error Occured'
+    //         })
+    //     })
         
-    }
-    else{
-        var list=[]
-        var limitCount=await Employee.find({name:req.body.search}).count()
-        var result=await Employee.find({name:req.body.search}).skip(req.body.pageNumber*10).limit(10)
-        if(result!=null){
-            list=(result)
-        }
-            res.json({
-                code: 200,
-                msg: list,
-                total:limitCount 
-            })
-    }
+    // }
+    // else{
+    //     var list=[]
+    //     var limitCount=await Employee.find({name:req.body.search}).count()
+    //     var result=await Employee.find({name:req.body.search}).skip(req.body.pageNumber*10).limit(10)
+    //     if(result!=null){
+    //         list=(result)
+    //     }
+    //         res.json({
+    //             code: 200,
+    //             msg: list,
+    //             total:limitCount 
+    //         })
+    // }
    
 }
 

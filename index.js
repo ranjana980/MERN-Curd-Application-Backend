@@ -7,8 +7,8 @@ const cors = require('cors');
 app.use(express.json({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
-
-mongoos.connect("mongodb+srv://<ranjana20@navgurukul.org>:<ranjana24081996>@atlascluster.d3frrjb.mongodb.net/?retryWrites=true&w=majority",
+// 7HReZppXK74OaZHU
+mongoos.connect('mongodb+srv://<ranjana980>:<7HReZppXK74OaZHU>@atlascluster.d3frrjb.mongodb.net/?retryWrites=true&w=majority',
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -21,9 +21,9 @@ mongoos.connect("mongodb+srv://<ranjana20@navgurukul.org>:<ranjana24081996>@atla
   }
 });
 
-app.use(cors({
-  origin: "https://mern-curd-application-frontend.vercel.app/"
-}))
+// app.use(cors({
+//   origin: "https://mern-curd-application-frontend.vercel.app/"
+// }))
 app.use(cors())
 
 app.use('/api/employee',EmployeeRoute)
