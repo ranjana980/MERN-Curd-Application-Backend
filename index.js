@@ -12,6 +12,7 @@ mongoos.connect('mongodb://localhost:27017/testapp',
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    family: 4,
 },(err)=>{
   if(err){
     console.log(err)
@@ -21,9 +22,9 @@ mongoos.connect('mongodb://localhost:27017/testapp',
   }
 });
 
-app.use(cors({
-  origin: "https://mern-curd-application-frontend.vercel.app/"
-}))
+// app.use(cors({
+//   origin: "https://mern-curd-application-frontend.vercel.app/"
+// }))
 app.use(cors())
 
 app.use('/api/employee',EmployeeRoute)
