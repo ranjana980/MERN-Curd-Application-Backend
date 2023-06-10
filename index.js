@@ -1,8 +1,7 @@
 const express = require('express');
 const mongoos = require('mongoose');
 const app = express();
-// const EmployeeRoute=require('./routes/employee')
-const EmployeeController = require('./Controller/EmployeeController')
+const EmployeeRoute=require('./routes/employee')
 const bodyParser = require("body-parser")
 const cors = require('cors');
 app.use(express.json({ extended: false }));
@@ -27,8 +26,7 @@ app.use(bodyParser.json())
 // }))
 app.use(cors())
 
-// app.use('/api/employee',EmployeeRoute)
-app.get('/', EmployeeController.index)
+app.use('/api/employee',EmployeeRoute)
 
 
 app.listen(4000, () => {
