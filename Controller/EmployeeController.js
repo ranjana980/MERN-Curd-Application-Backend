@@ -1,42 +1,80 @@
-const { response } = require('express')
-const { validate } = require('../models/employee')
 const Employee = require('../models/employee')
 const Validation = require('../Validation/formValid')
 
 const index = async (req, res) => {
-    const totalCount = await Employee.count()
-    if(req.body.search=="" || req.body.search==undefined ||req.body.search==null){
-        Employee.find().skip(req.body.pageNumber*10).limit(10)
-        .then(response => {
-            res.json({
-                code: 200,
-                msg: response,
-                total:totalCount
-                
+    const page = req.query.page 
+    const limit = req.query.limit
+    const search=req.query.search
+    if(page){
+        if(limit){
+            if(search){
+            const totalCount = await Employee.find({name:search}).count()
+            Employee.find({name:search}).skip(parseInt(req.query.page)*10).limit(parseInt(req.query.limit))
+            .then(response => {
+                res.json({
+                    code: 200,
+                    msg: response,
+                    total:totalCount   
+                })
             })
-            
-        })
-        .catch(error => {
-            res.json({
-                msg: 'An error Occured'
+            .catch(error => {
+                res.json({
+                    msg: 'An error Occured'
+                })
+            }) 
+        }
+        else{
+            const totalCount = await Employee.find().count()
+            Employee.find().skip(parseInt(req.query.page)*10).limit(parseInt(req.query.limit))
+            .then(response => {
+                res.json({
+                    code: 200,
+                    msg: response,
+                    total:totalCount   
+                })
             })
-        })
-        
+            .catch(error => {
+                res.json({
+                    msg: 'An error Occured'
+                })
+            }) 
+    
+        }
     }
     else{
-        var list=[]
-        var limitCount=await Employee.find({name:req.body.search}).count()
-        var result=await Employee.find({name:req.body.search}).skip(req.body.pageNumber*10).limit(10)
-        if(result!=null){
-            list=(result)
-        }
-            res.json({
-                code: 200,
-                msg: list,
-                total:limitCount 
+        const totalCount = await Employee.find().count()
+            Employee.find().skip(parseInt(req.query.page)*10)
+            .then(response => {
+                res.json({
+                    code: 200,
+                    msg: response,
+                    total:totalCount   
+                })
             })
+            .catch(error => {
+                res.json({
+                    msg: 'An error Occured'
+                })
+            }) 
+        
     }
-   
+}
+else{
+    const totalCount = await Employee.find().count()
+            Employee.find()
+            .then(response => {
+                res.json({
+                    code: 200,
+                    msg: response,
+                    total:totalCount   
+                })
+            })
+            .catch(error => {
+                res.json({
+                    msg: 'An error Occured'
+                })
+            }) 
+}  
 }
 
 const show = (req, res) => {
