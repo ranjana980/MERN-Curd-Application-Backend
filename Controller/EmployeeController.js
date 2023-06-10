@@ -1,6 +1,7 @@
 const Employee = require('../models/employee')
 const Validation = require('../Validation/formValid')
 
+
 const index = async (req, res) => {
     const page = req.query.page 
     const limit = req.query.limit
@@ -121,7 +122,7 @@ const store = (req, res) => {
         })
         .catch(error => {
             res.json({
-                msg: 'An error Occured!'
+                msg: error
             })
         })
     }

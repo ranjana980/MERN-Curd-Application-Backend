@@ -8,7 +8,7 @@ app.use(express.json({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-mongoos.connect('mongodb://localhost:27017/testapp',
+mongoos.connect("mongodb+srv://ranjana980:ranjana24081996@cluster0.glu3bgy.mongodb.net/?authMechanism=DEFAULT",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
