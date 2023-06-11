@@ -81,7 +81,6 @@ else{
 
 const show = (req, res) => {
     let employeeID = req.params.id
-    if (Validation.IdValid(req.body) == true) {
         Employee.findById(employeeID)
             .then(response => {
                 res.json({
@@ -95,13 +94,8 @@ const show = (req, res) => {
                 })
 
             })
-    }
-    else {
-        res.json({
-            code: 201,
-            msg: `${Validation.IdValid(req.body)}  Not Found` 
-        })
-    }
+    
+   
 }
 
 const store = (req, res) => {
