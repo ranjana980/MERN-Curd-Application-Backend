@@ -80,7 +80,7 @@ else{
 }
 
 const show = (req, res) => {
-    let employeeID = id
+    let employeeID = req.params.id
     if (Validation.IdValid(req.body) == true) {
         Employee.findById(employeeID)
             .then(response => {
@@ -136,7 +136,7 @@ const store = (req, res) => {
 }
 
 const update = (req, res) => {
-    let employeeID = req.query.id
+    let employeeID = req.params.id
     let updateData = {
         name: req.body.name,
         designation: req.body.designation,
@@ -172,7 +172,7 @@ const update = (req, res) => {
 }
 
 const deleteEmpolyee = (req, res) => {
-    let employeeID = req.query.id
+    let employeeID = req.params.id
     Employee.findByIdAndRemove(employeeID)
         .then(() => {
             if (Validation.bodyValid(req.body)==true) {
