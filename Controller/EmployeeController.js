@@ -12,7 +12,6 @@ const index = async (req, res) => {
             const totalCount = await Employee.find({name:search}).count()
             Employee.find({name:search}).skip(parseInt(req.query.page)*limit).limit(parseInt(req.query.limit))
             .then(response => {
-                console.log(response,'res')
                 res.json({
                     code: 200,
                     msg: response,
@@ -81,7 +80,7 @@ else{
 }
 
 const show = (req, res) => {
-    let employeeID = req.body.employeeID
+    let employeeID = id
     if (Validation.IdValid(req.body) == true) {
         Employee.findById(employeeID)
             .then(response => {
@@ -137,7 +136,7 @@ const store = (req, res) => {
 }
 
 const update = (req, res) => {
-    let employeeID = req.body.employeeID
+    let employeeID = req.query.id
     let updateData = {
         name: req.body.name,
         designation: req.body.designation,
@@ -173,7 +172,7 @@ const update = (req, res) => {
 }
 
 const deleteEmpolyee = (req, res) => {
-    let employeeID = req.body.employeeID
+    let employeeID = req.query.id
     Employee.findByIdAndRemove(employeeID)
         .then(() => {
             if (Validation.bodyValid(req.body)==true) {
