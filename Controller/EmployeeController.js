@@ -80,6 +80,7 @@ else{
 }
 
 const show = (req, res) => {
+    console.log('idd')
     let employeeID = req.params.id
         Employee.findById(employeeID)
             .then(response => {
@@ -94,8 +95,6 @@ const show = (req, res) => {
                 })
 
             })
-    
-   
 }
 
 const store = (req, res) => {
