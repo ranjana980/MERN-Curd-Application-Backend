@@ -23,8 +23,9 @@ mongoos.connect("mongodb+srv://ranjana980:ranjana24081996@cluster0.glu3bgy.mongo
 });
 
 app.use(cors({
-  origin: "https://mern-curd-application-frontend.vercel.app/"
+  origin: "https://mern-curd-application-frontend.vercel.app"
 }))
+
 app.use(cors())
 
 app.use('/api/employee',EmployeeRoute)

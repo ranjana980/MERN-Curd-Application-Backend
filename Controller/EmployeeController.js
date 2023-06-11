@@ -12,6 +12,7 @@ const index = async (req, res) => {
             const totalCount = await Employee.find({name:search}).count()
             Employee.find({name:search}).skip(parseInt(req.query.page)*limit).limit(parseInt(req.query.limit))
             .then(response => {
+                console.log(response,'res')
                 res.json({
                     code: 200,
                     msg: response,
@@ -26,7 +27,7 @@ const index = async (req, res) => {
         }
         else{
             const totalCount = await Employee.find().count()
-            Employee.find().skip(parseInt(req.query.page)*limit).limit(parseInt(req.query.limit))
+             Employee.find().skip(parseInt(req.query.page)*limit).limit(parseInt(req.query.limit))
             .then(response => {
                 res.json({
                     code: 200,
@@ -44,7 +45,7 @@ const index = async (req, res) => {
     }
     else{
         const totalCount = await Employee.find().count()
-            Employee.find().skip(parseInt(req.query.page)*limit)
+        await Employee.find().skip(parseInt(req.query.page)*limit)
             .then(response => {
                 res.json({
                     code: 200,
@@ -62,7 +63,8 @@ const index = async (req, res) => {
 }
 else{
     const totalCount = await Employee.find().count()
-            Employee.find()
+
+    await  Employee.find()
             .then(response => {
                 res.json({
                     code: 200,
