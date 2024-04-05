@@ -23,7 +23,7 @@ mongoos.connect("mongodb+srv://ranjana980:ranjana24081996@cluster0.glu3bgy.mongo
 });
 
 app.use(cors({
-  origin: "https://mern-curd-application-frontend.vercel.app"
+  origin: "https://studious-engine-rxrg557jjwg35j5g-3000.app.github.dev"
 }))
 
 app.use(cors())

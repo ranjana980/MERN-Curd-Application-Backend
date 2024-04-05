@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const EmployeeController = require('../Controller/EmployeeController')
+router.post('/register', EmployeeController.registerUser)
+router.post('/sign-in', EmployeeController.signInUser)
 router.get('/', EmployeeController.index)
 router.get('/show/:id', EmployeeController.show)
 router.post('/store', EmployeeController.store)
