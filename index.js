@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoos = require('mongoose');
 const app = express();
-const EmployeeRoute=require('./routes/employee')
+const EmployeeRoute = require('./routes/employee')
 const bodyParser = require("body-parser")
 const cors = require('cors');
 app.use(express.json({ extended: false }));
@@ -13,22 +13,23 @@ mongoos.connect("mongodb+srv://ranjana980:ranjana24081996@cluster0.glu3bgy.mongo
     useNewUrlParser: true,
     useUnifiedTopology: true,
     family: 4,
-},(err)=>{
-  if(err){
-    console.log(err)
-  }
-  else{
-    console.log('connected successfully')
-  }
-});
+  }, (err) => {
+    if (err) {
+      console.log(err)
+    }
+    else {
+      console.log('connected successfully')
+    }
+  });
 
 app.use(cors({
-  origin: "https://studious-engine-rxrg557jjwg35j5g-3000.app.github.dev"
+  origin: "https://mern-curd-application-frontend.vercel.app"
+  // origin: "http://localhost:3000"
 }))
 
 app.use(cors())
 
-app.use('/api/employee',EmployeeRoute)
+app.use('/api/employee', EmployeeRoute)
 
 
 app.listen(4000, () => {

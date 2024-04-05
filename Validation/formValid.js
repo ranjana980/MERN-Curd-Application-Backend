@@ -1,40 +1,34 @@
-const bodyValid=(body)=>{
-    if(body.name==""){
-        return "name"
-    }
-     if(body.email==""){
-        return "email"
-    }
-     if(body.phone==""){
+const bodyValid = (body) => {
+    if (body.phone) {
         return "phone"
     }
-     if(body.age==""){
+    if (body.age) {
         return "age"
     }
-     if(body.designation==""){
+    if (body.designation) {
         return "designation"
     }
-    else{
+    else {
         return true
     }
 
 }
 
-const IdValid=(body)=>{
-    if(body.employeeID==""){
+const IdValid = (body) => {
+    if (body.employeeID == "") {
         return "employeeID"
     }
-    else if(body.employeeID==null){
+    else if (body.employeeID == null) {
         return "employeeID"
     }
-    else if(body.employeeID==undefined){
+    else if (body.employeeID == undefined) {
         return "employeeID"
     }
-    
-    else{
+
+    else {
         return true
     }
 
 }
 
-module.exports={bodyValid,IdValid}
+module.exports = { bodyValid, IdValid }

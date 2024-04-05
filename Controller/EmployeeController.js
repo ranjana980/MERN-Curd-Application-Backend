@@ -1,183 +1,129 @@
 const Employee = require('../models/employee')
 const Validation = require('../Validation/formValid')
-
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 
 const index = async (req, res) => {
-    const page = req.query.page
-    const limit = req.query.limit
-    const search = req.query.search
+    const { page, limit, search } = req.query
     if (page) {
         if (limit) {
             if (search) {
                 const totalCount = await Employee.find({ name: search }).count()
-                Employee.find({ name: search }).skip(parseInt(req.query.page) * limit).limit(parseInt(req.query.limit))
+                Employee.find({ name: search }).skip(parseInt(page) * limit).limit(parseInt(limit))
                     .then(response => {
-                        res.json({
+                        res.status(200).json({
                             code: 200,
-                            msg: response,
+                            data: response,
                             total: totalCount
                         })
                     })
                     .catch(error => {
                         res.json({
-                            msg: 'An error Occured'
+                            message: 'An error Occured'
                         })
                     })
             }
             else {
                 const totalCount = await Employee.find().count()
-                Employee.find().skip(parseInt(req.query.page) * limit).limit(parseInt(req.query.limit))
+                Employee.find().skip(parseInt(page) * limit).limit(parseInt(limit))
                     .then(response => {
                         res.json({
                             code: 200,
-                            msg: response,
+                            data: response,
                             total: totalCount
                         })
                     })
                     .catch(error => {
                         res.json({
-                            msg: 'An error Occured'
+                            message: 'An error Occured'
                         })
                     })
-
             }
         }
         else {
             const totalCount = await Employee.find().count()
-            await Employee.find().skip(parseInt(req.query.page) * limit)
+            await Employee.find().skip(parseInt(page) * limit)
                 .then(response => {
                     res.json({
                         code: 200,
-                        msg: response,
+                        data: response,
                         total: totalCount
                     })
                 })
                 .catch(error => {
                     res.json({
-                        msg: 'An error Occured'
+                        message: 'An error Occured'
                     })
                 })
-
         }
     }
     else {
         const totalCount = await Employee.find().count()
-
         await Employee.find()
             .then(response => {
                 res.json({
                     code: 200,
-                    msg: response,
+                    data: response,
                     total: totalCount
                 })
             })
             .catch(error => {
                 res.json({
-                    msg: 'An error Occured'
+                    message: 'An error Occured'
                 })
             })
     }
 }
 
 const show = (req, res) => {
-    console.log('idd')
     let employeeID = req.params.id
     Employee.findById(employeeID)
         .then(response => {
             res.json({
                 code: 200,
-                msg: response
+                message: response
             })
         })
         .catch(error => {
             res.json({
-                msg: 'An error Occured!'
+                message: 'An error Occured!'
             })
 
         })
 }
 
-const store = (req, res) => {
-    let employee = new Employee({
-        name: req.body.name,
-        designation: req.body.designation,
-        email: req.body.email,
-        phone: req.body.phone,
-        age: req.body.age,
-    })
-
-    if (Validation.bodyValid(req.body) == true) {
-        employee.save()
-            .then(response => {
-                res.json({
-                    code: 200,
-                    msg: "Employee Added Successfully"
-                })
-            })
-            .catch(error => {
-                res.json({
-                    msg: error
-                })
-            })
-    }
-    else {
-        res.json({
-            code: 202,
-            msg: `${Validation.bodyValid(req.body)}  Not Found`
-        })
-    }
-}
 
 const update = (req, res) => {
     let employeeID = req.params.id
+    const { designation, phone, age } = req.body
     let updateData = {
-        name: req.body.name,
-        designation: req.body.designation,
-        email: req.body.email,
-        phone: req.body.phone,
-        age: req.body.age
+        designation,
+        phone,
+        age
     }
-    if (Validation.bodyValid(req.body) == true) {
-        if (req.body.name != "" || req.body.designation != "" || req.body.email != "" || req.body.phone != "" || req.body.age) {
-            Employee.findByIdAndUpdate(employeeID, { $set: updateData })
-                .then(response => {
-                    res.json({
-                        code: 200,
-                        msg: 'Empolyee Updated Successfully'
-                    })
-                })
-
-        }
-        else {
+    Employee.findByIdAndUpdate(employeeID, { $set: updateData })
+        .then(response => {
             res.json({
-                code: 202,
-                msg: `${Validation.bodyValid(req.body)}  Not Found`
+                code: 200,
+                message: 'Empolyee Updated Successfully'
             })
-        }
-
-    }
-    else {
-        res.json({
-            code: 201,
-            msg: `${Validation.IdValid(req.body)}  Not Found`
         })
-    }
 }
 
 const deleteEmpolyee = (req, res) => {
     let employeeID = req.params.id
     Employee.findByIdAndRemove(employeeID)
         .then(() => {
-            if (Validation.bodyValid(req.body) == true) {
+            if (Validation.bodyValid(req.body) === true) {
                 res.json({
                     code: 200,
-                    msg: "Employee Deleted Succefully"
+                    message: "Employee Deleted Succefully"
                 })
             }
             else {
                 res.json({
                     code: 201,
-                    msg: `${Validation.IdValid(req.body)}  Not Found`
+                    message: `${Validation.IdValid(req.body)}  Not Found`
                 })
             }
 
@@ -190,49 +136,73 @@ const deleteEmpolyee = (req, res) => {
 
 }
 
-const registerUser = (req, res) => {
-    const { username, email, password } = req.body;
-
-    // Check if user already exists
-    const existingUser = Employee.find(user => user.email === email);
-    if (existingUser) {
-        return res.status(400).json({ message: 'User already exists' });
+const registerUser = async (req, res) => {
+    const { firstName, lastName, email, password } = req.body;
+    try {
+        const existinguser = await Employee.findOne({ email: email })
+        if (existinguser) {
+            res.status(201).json({
+                code: 201,
+                message: "User Already Exist!"
+            })
+        }
+        else {
+            const userNo = Math.floor(Math.random() * 100);
+            const username = `${firstName?.toLowerCase(/\s/g, '').replace()}${lastName ? lastName?.toLowerCase().replace(/\s/g, '') : ''}${userNo}`;
+            const hashPassword = await bcrypt.hash(password, 10);
+            const token = jwt.sign({ email }, 'secret', { expiresIn: '5h' });
+            const result = await Employee.create({
+                username,
+                designation: '',
+                email,
+                phone: '',
+                age: '',
+                password: hashPassword,
+                token
+            })
+            res.status(200).json({
+                code: 200,
+                message: 'SignUp Successfully',
+                data: result,
+                token: token
+            })
+        }
     }
-
-    // Create new user
-    const newUser = { username, email, password };
-    Employee.push(newUser);
-
-    // Generate JWT token
-    const token = jwt.sign({ email }, secretKey, { expiresIn: '5h' }); // Expires in 5 hour
-
-    res.status(201).json({ message: 'User registered successfully', token, code: 200 });
-
+    catch (err) {
+        res.status(400).json({
+            code: 400,
+            msg: 'somthing went wrong'
+        })
+    }
 }
 
-const signInUser = (req, res) => {
+
+const signInUser = async (req, res) => {
     const { email, password } = req.body;
-
-    const user = Employee.find(user => user.username === username);
-
-    if (!user) {
-        return res.status(404).json({ error: 'User not found' });
+    const user = await Employee.findOne({ email: email });
+    try {
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        bcrypt.compare(password, user.password, (err, result) => {
+            if (err || !result) {
+                return res.status(401).json({ error: 'Invalid email or password' });
+            }
+            const token = jwt.sign({ id: user._id, username: user.username }, 'secret', { expiresIn: '5h' });
+            res.status(200).json({ token, code: 200, message: 'Sign Up Successfully!' });
+        });
+    }
+    catch (err) {
+        console.log(err, 'errror')
+        res.status(400).json({
+            code: 400,
+            msg: 'somthing went wrong'
+        })
     }
 
-    // Check password
-    bcrypt.compare(password, user.password, (err, result) => {
-        if (err || !result) {
-            return res.status(401).json({ error: 'Invalid username or password' });
-        }
-
-        // Generate JWT token
-        const token = jwt.sign({ id: user.id, username: user.username }, 'secret', { expiresIn: '5h' });
-
-        res.json({ token });
-    });
 }
 
 
 module.exports = {
-    index, show, store, update, deleteEmpolyee, registerUser, signInUser
+    index, show, update, deleteEmpolyee, registerUser, signInUser
 }
