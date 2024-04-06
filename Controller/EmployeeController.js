@@ -1,7 +1,7 @@
 const Employee = require('../models/employees')
 const Validation = require('../Validation/formValid')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+// const bcrypt = require('bcrypt')
+// const jwt = require('jsonwebtoken')
 
 const index = async (req, res) => {
     const { page, limit, search } = req.query
@@ -144,71 +144,71 @@ const deleteEmpolyee = (req, res) => {
 
 }
 
-const registerUser = async (req, res) => {
-    const { firstName, lastName, email, password } = req.body;
-    try {
-        const existinguser = await Employee.findOne({ email: email })
-        if (existinguser) {
-            res.status(201).json({
-                code: 201,
-                message: "User Already Exist!"
-            })
-        }
-        else {
-            const userNo = Math.floor(Math.random() * 100);
-            const username = `${firstName?.toLowerCase(/\s/g, '').replace()}${lastName ? lastName?.toLowerCase().replace(/\s/g, '') : ''}${userNo}`;
-            const hashPassword = await bcrypt.hash(password, 10);
-            const token = jwt.sign({ email }, 'secret', { expiresIn: '5h' });
-            const result = await Employee.create({
-                username,
-                designation: '',
-                email,
-                phone: '',
-                age: '',
-                password: hashPassword,
-                token
-            })
-            res.status(200).json({
-                code: 200,
-                message: 'SignUp Successfully',
-                data: result,
-                token: token
-            })
-        }
-    }
-    catch (err) {
-        res.status(400).json({
-            code: 400,
-            msg: 'somthing went wrong'
-        })
-    }
-}
+// const registerUser = async (req, res) => {
+//     const { firstName, lastName, email, password } = req.body;
+//     try {
+//         const existinguser = await Employee.findOne({ email: email })
+//         if (existinguser) {
+//             res.status(201).json({
+//                 code: 201,
+//                 message: "User Already Exist!"
+//             })
+//         }
+//         else {
+//             const userNo = Math.floor(Math.random() * 100);
+//             const username = `${firstName?.toLowerCase(/\s/g, '').replace()}${lastName ? lastName?.toLowerCase().replace(/\s/g, '') : ''}${userNo}`;
+//             const hashPassword = await bcrypt.hash(password, 10);
+//             const token = jwt.sign({ email }, 'secret', { expiresIn: '5h' });
+//             const result = await Employee.create({
+//                 username,
+//                 designation: '',
+//                 email,
+//                 phone: '',
+//                 age: '',
+//                 password: hashPassword,
+//                 token
+//             })
+//             res.status(200).json({
+//                 code: 200,
+//                 message: 'SignUp Successfully',
+//                 data: result,
+//                 token: token
+//             })
+//         }
+//     }
+//     catch (err) {
+//         res.status(400).json({
+//             code: 400,
+//             msg: 'somthing went wrong'
+//         })
+//     }
+// }
 
 
-const signInUser = async (req, res) => {
-    const { email, password } = req.body;
-    const user = await Employee.findOne({ email: email });
-    try {
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-        bcrypt.compare(password, user.password, (err, result) => {
-            if (err || !result) {
-                return res.status(401).json({ error: 'Invalid email or password' });
-            }
-            const token = jwt.sign({ id: user._id, username: user.username }, 'secret', { expiresIn: '5h' });
-            res.status(200).json({ token, code: 200, message: 'Sign In Successfully!' });
-        });
-    }
-    catch (err) {
-        console.log(err, 'errror')
-        res.status(400).json({
-            code: 400,
-            msg: 'somthing went wrong'
-        })
-    }
+// const signInUser = async (req, res) => {
+//     const { email, password } = req.body;
+//     const user = await Employee.findOne({ email: email });
+//     try {
+//         if (!user) {
+//             return res.status(404).json({ error: 'User not found' });
+//         }
+//         bcrypt.compare(password, user.password, (err, result) => {
+//             if (err || !result) {
+//                 return res.status(401).json({ error: 'Invalid email or password' });
+//             }
+//             const token = jwt.sign({ id: user._id, username: user.username }, 'secret', { expiresIn: '5h' });
+//             res.status(200).json({ token, code: 200, message: 'Sign In Successfully!' });
+//         });
+//     }
+//     catch (err) {
+//         console.log(err, 'errror')
+//         res.status(400).json({
+//             code: 400,
+//             msg: 'somthing went wrong'
+//         })
+//     }
 
-}
+// }
 
 
 module.exports = {
