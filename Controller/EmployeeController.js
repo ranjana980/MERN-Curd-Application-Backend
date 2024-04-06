@@ -212,5 +212,5 @@ const deleteEmpolyee = (req, res) => {
 
 
 module.exports = {
-    index, show, update, deleteEmpolyee, registerUser, signInUser
+    index, show, update, deleteEmpolyee
 }
