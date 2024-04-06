@@ -1,5 +1,5 @@
 
-const bcrypt = require('bcrypt')
+// const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const Validation = require('../Validation/formValid')
 const Employee = require('../models/employees')
