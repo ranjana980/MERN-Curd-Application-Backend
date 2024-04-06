@@ -1,7 +1,7 @@
-const Employee = require('../models/employees')
 const Validation = require('../Validation/formValid')
 // const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const Employee = require('../models/employees')
 
 const index = async (req, res) => {
     const { page, limit, search } = req.query
