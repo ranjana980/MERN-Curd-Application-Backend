@@ -1,6 +1,6 @@
-const Validation = require('../Validation/formValid')
-// const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const Validation = require('../Validation/formValid')
 const Employee = require('../models/employees')
 
 const index = async (req, res) => {
@@ -157,7 +157,7 @@ const registerUser = async (req, res) => {
         else {
             const userNo = Math.floor(Math.random() * 100);
             const username = `${firstName?.toLowerCase(/\s/g, '').replace()}${lastName ? lastName?.toLowerCase().replace(/\s/g, '') : ''}${userNo}`;
-            // const hashPassword = await bcrypt.hash(password, 10);
+            const hashPassword = await bcrypt.hash(password, 10);
             const token = jwt.sign({ email }, 'secret', { expiresIn: '5h' });
             const result = await Employee.create({
                 username,
@@ -165,7 +165,7 @@ const registerUser = async (req, res) => {
                 email,
                 phone: '',
                 age: '',
-                // password: hashPassword,
+                password: hashPassword,
                 token
             })
             res.status(200).json({
@@ -188,25 +188,25 @@ const registerUser = async (req, res) => {
 const signInUser = async (req, res) => {
     const { email, password } = req.body;
     const user = await Employee.findOne({ email: email });
-    // try {
-    //     if (!user) {
-    //         return res.status(404).json({ error: 'User not found' });
-    //     }
-    //     bcrypt.compare(password, user.password, (err, result) => {
-    //         if (err || !result) {
-    //             return res.status(401).json({ error: 'Invalid email or password' });
-    //         }
-    //         const token = jwt.sign({ id: user._id, username: user.username }, 'secret', { expiresIn: '5h' });
-    //         res.status(200).json({ token, code: 200, message: 'Sign In Successfully!' });
-    //     });
-    // }
-    // catch (err) {
-    //     console.log(err, 'errror')
-    //     res.status(400).json({
-    //         code: 400,
-    //         msg: 'somthing went wrong'
-    //     })
-    // }
+    try {
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        bcrypt.compare(password, user.password, (err, result) => {
+            if (err || !result) {
+                return res.status(401).json({ error: 'Invalid email or password' });
+            }
+            const token = jwt.sign({ id: user._id, username: user.username }, 'secret', { expiresIn: '5h' });
+            res.status(200).json({ token, code: 200, message: 'Sign In Successfully!' });
+        });
+    }
+    catch (err) {
+        console.log(err, 'errror')
+        res.status(400).json({
+            code: 400,
+            msg: 'somthing went wrong'
+        })
+    }
 
 }
 
