@@ -7,6 +7,7 @@ const cors = require('cors');
 app.use(express.json({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+mongoos.set('strictQuery', false);
 
 mongoos.connect("mongodb+srv://ranjana980:ranjana24081996@cluster0.glu3bgy.mongodb.net/?authMechanism=DEFAULT",
   {
@@ -26,7 +27,7 @@ app.use(cors({
   origin: "https://mern-curd-application-frontend.vercel.app",
   // origin: "http://localhost:3000",
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  // allowedHeaders: ['Content-Type', 'Authorization']
 }))
 
 
