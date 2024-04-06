@@ -1,152 +1,148 @@
-const Employee = require('../models/employee.js')
+const Employee = require('../models/employee')
 const Validation = require('../Validation/formValid')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+// const bcrypt = require('bcrypt')
+// const jwt = require('jsonwebtoken')
 
 const index = async (req, res) => {
     const { page, limit, search } = req.query
-    res.json({
-        code: 200,
-        message: 'success'
-    })
-    // try {
-    //     if (page) {
-    //         if (limit) {
-    //             if (search) {
-    //                 const totalCount = await Employee.find({ name: search }).count()
-    //                 Employee.find({ name: search }).skip(parseInt(page) * limit).limit(parseInt(limit))
-    //                     .then(response => {
-    //                         res.status(200).json({
-    //                             code: 200,
-    //                             data: response,
-    //                             total: totalCount
-    //                         })
-    //                     })
-    //                     .catch(error => {
-    //                         res.json({
-    //                             message: 'An error Occured'
-    //                         })
-    //                     })
-    //             }
-    //             else {
-    //                 const totalCount = await Employee.find().count()
-    //                 Employee.find().skip(parseInt(page) * limit).limit(parseInt(limit))
-    //                     .then(response => {
-    //                         res.json({
-    //                             code: 200,
-    //                             data: response,
-    //                             total: totalCount
-    //                         })
-    //                     })
-    //                     .catch(error => {
-    //                         res.json({
-    //                             message: 'An error Occured'
-    //                         })
-    //                     })
-    //             }
-    //         }
-    //         else {
-    //             const totalCount = await Employee.find().count()
-    //             await Employee.find().skip(parseInt(page) * limit)
-    //                 .then(response => {
-    //                     res.json({
-    //                         code: 200,
-    //                         data: response,
-    //                         total: totalCount
-    //                     })
-    //                 })
-    //                 .catch(error => {
-    //                     res.json({
-    //                         message: 'An error Occured'
-    //                     })
-    //                 })
-    //         }
-    //     }
-    //     else {
-    //         const totalCount = await Employee.find().count()
-    //         await Employee.find()
-    //             .then(response => {
-    //                 res.json({
-    //                     code: 200,
-    //                     data: response,
-    //                     total: totalCount
-    //                 })
-    //             })
-    //             .catch(error => {
-    //                 res.json({
-    //                     message: 'An error Occured'
-    //                 })
-    //             })
-    //     }
-    // }
-    // catch (err) {
-    //     res.status(400).json({
-    //         code: 400,
-    //         msg: 'somthing went wrong'
-    //     })
-    // }
+    try {
+        if (page) {
+            if (limit) {
+                if (search) {
+                    const totalCount = await Employee.find({ name: search }).count()
+                    Employee.find({ name: search }).skip(parseInt(page) * limit).limit(parseInt(limit))
+                        .then(response => {
+                            res.status(200).json({
+                                code: 200,
+                                data: response,
+                                total: totalCount
+                            })
+                        })
+                        .catch(error => {
+                            res.json({
+                                message: 'An error Occured'
+                            })
+                        })
+                }
+                else {
+                    const totalCount = await Employee.find().count()
+                    Employee.find().skip(parseInt(page) * limit).limit(parseInt(limit))
+                        .then(response => {
+                            res.json({
+                                code: 200,
+                                data: response,
+                                total: totalCount
+                            })
+                        })
+                        .catch(error => {
+                            res.json({
+                                message: 'An error Occured'
+                            })
+                        })
+                }
+            }
+            else {
+                const totalCount = await Employee.find().count()
+                await Employee.find().skip(parseInt(page) * limit)
+                    .then(response => {
+                        res.json({
+                            code: 200,
+                            data: response,
+                            total: totalCount
+                        })
+                    })
+                    .catch(error => {
+                        res.json({
+                            message: 'An error Occured'
+                        })
+                    })
+            }
+        }
+        else {
+            const totalCount = await Employee.find().count()
+            await Employee.find()
+                .then(response => {
+                    res.json({
+                        code: 200,
+                        data: response,
+                        total: totalCount
+                    })
+                })
+                .catch(error => {
+                    res.json({
+                        message: 'An error Occured'
+                    })
+                })
+        }
+    }
+    catch (err) {
+        res.status(400).json({
+            code: 400,
+            msg: 'somthing went wrong'
+        })
+    }
 }
 
-// const show = (req, res) => {
-//     let employeeID = req.params.id
-//     Employee.findById(employeeID)
-//         .then(response => {
-//             res.json({
-//                 code: 200,
-//                 message: response
-//             })
-//         })
-//         .catch(error => {
-//             res.json({
-//                 message: 'An error Occured!'
-//             })
+const show = (req, res) => {
+    let employeeID = req.params.id
+    Employee.findById(employeeID)
+        .then(response => {
+            res.json({
+                code: 200,
+                message: response
+            })
+        })
+        .catch(error => {
+            res.json({
+                message: 'An error Occured!'
+            })
 
-//         })
-// }
+        })
+}
 
 
-// const update = (req, res) => {
-//     let employeeID = req.params.id
-//     const { designation, phone, age } = req.body
-//     let updateData = {
-//         designation,
-//         phone,
-//         age
-//     }
-//     Employee.findByIdAndUpdate(employeeID, { $set: updateData })
-//         .then(response => {
-//             res.json({
-//                 code: 200,
-//                 message: 'Empolyee Updated Successfully'
-//             })
-//         })
-// }
+const update = (req, res) => {
+    let employeeID = req.params.id
+    const { designation, phone, age } = req.body
+    let updateData = {
+        designation,
+        phone,
+        age
+    }
+    Employee.findByIdAndUpdate(employeeID, { $set: updateData })
+        .then(response => {
+            res.json({
+                code: 200,
+                message: 'Empolyee Updated Successfully'
+            })
+        })
+}
 
-// const deleteEmpolyee = (req, res) => {
-//     let employeeID = req.params.id
-//     Employee.findByIdAndRemove(employeeID)
-//         .then(() => {
-//             if (Validation.bodyValid(req.body) === true) {
-//                 res.json({
-//                     code: 200,
-//                     message: "Employee Deleted Succefully"
-//                 })
-//             }
-//             else {
-//                 res.json({
-//                     code: 201,
-//                     message: `${Validation.IdValid(req.body)}  Not Found`
-//                 })
-//             }
+const deleteEmpolyee = (req, res) => {
+    let employeeID = req.params.id
+    Employee.findByIdAndRemove(employeeID)
+        .then(() => {
+            if (Validation.bodyValid(req.body) === true) {
+                res.json({
+                    code: 200,
+                    message: "Employee Deleted Succefully"
+                })
+            }
+            else {
+                res.json({
+                    code: 201,
+                    message: `${Validation.IdValid(req.body)}  Not Found`
+                })
+            }
 
-//         })
-//         .catch(error => {
-//             res.json({
-//                 message: 'An error Occured'
-//             })
-//         })
+        })
+        .catch(error => {
+            res.json({
+                message: 'An error Occured'
+            })
+        })
 
-// }
+}
 
 // const registerUser = async (req, res) => {
 //     const { firstName, lastName, email, password } = req.body;
@@ -216,5 +212,5 @@ const index = async (req, res) => {
 
 
 module.exports = {
-    index
+    index, show, update, deleteEmpolyee, registerUser, signInUser
 }

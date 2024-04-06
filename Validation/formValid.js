@@ -15,13 +15,13 @@ const bodyValid = (body) => {
 }
 
 const IdValid = (body) => {
-    if (body.employeeID == "") {
+    if (body.employeeID === "") {
         return "employeeID"
     }
-    else if (body.employeeID == null) {
+    else if (body.employeeID === null) {
         return "employeeID"
     }
-    else if (body.employeeID == undefined) {
+    else if (body.employeeID === undefined) {
         return "employeeID"
     }
 
