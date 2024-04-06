@@ -27,7 +27,6 @@ app.use(cors({
   origin: "https://mern-curd-application-frontend.vercel.app",
   // origin: "http://localhost:3000",
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  // allowedHeaders: ['Content-Type', 'Authorization']
 }))
 
 
