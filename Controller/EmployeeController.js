@@ -1,6 +1,6 @@
 
 // const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+// const jwt = require('jsonwebtoken')
 const Validation = require('../Validation/formValid')
 const Employee = require('../models/employees')
 
@@ -146,7 +146,7 @@ const deleteEmpolyee = (req, res) => {
 }
 
 const registerUser = async (req, res) => {
-    const { firstName, lastName, email, password } = req.body;
+    const { firstName, lastName, email } = req.body;
     try {
         const existinguser = await Employee.findOne({ email: email })
         if (existinguser) {
@@ -159,7 +159,7 @@ const registerUser = async (req, res) => {
             const userNo = Math.floor(Math.random() * 100);
             const username = `${firstName?.toLowerCase(/\s/g, '').replace()}${lastName ? lastName?.toLowerCase().replace(/\s/g, '') : ''}${userNo}`;
             // const hashPassword = await bcrypt.hash(password, 10);
-            const token = jwt.sign({ email }, 'secret', { expiresIn: '5h' });
+            // const token = jwt.sign({ email }, 'secret', { expiresIn: '5h' });
             const result = await Employee.create({
                 username,
                 designation: '',
@@ -167,7 +167,7 @@ const registerUser = async (req, res) => {
                 phone: '',
                 age: '',
                 // password: hashPassword,
-                token
+                // token
             })
             res.status(200).json({
                 code: 200,
