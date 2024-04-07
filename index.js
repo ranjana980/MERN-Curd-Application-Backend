@@ -26,7 +26,7 @@ mongoos.connect("mongodb+srv://ranjana980:ranjana24081996@cluster0.glu3bgy.mongo
 app.use(cors({
   origin: "https://mern-curd-application-frontend.vercel.app",
   // origin: "http://localhost:3000",
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  // methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }))
 
 
