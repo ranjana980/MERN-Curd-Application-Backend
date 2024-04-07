@@ -145,44 +145,44 @@ const deleteEmpolyee = (req, res) => {
 
 }
 
-// const registerUser = async (req, res) => {
-//     const { firstName, lastName, email } = req.body;
-//     try {
-//         const existinguser = await Employee.findOne({ email: email })
-//         if (existinguser) {
-//             res.json({
-//                 code: 201,
-//                 message: "User Already Exist!"
-//             })
-//         }
-//         else {
-//             const userNo = Math.floor(Math.random() * 100);
-//             const username = `${firstName?.toLowerCase(/\s/g, '').replace()}${lastName ? lastName?.toLowerCase().replace(/\s/g, '') : ''}${userNo}`;
-//             const hashPassword = await bcrypt.hash(password, 10);
-//             const token = jwt.sign({ email }, 'secret', { expiresIn: '5h' });
-//             const result = await Employee.create({
-//                 username,
-//                 designation: '',
-//                 email,
-//                 phone: '',
-//                 age: '',
-//                 password: hashPassword,
-//                 token
-//             })
-//             res.json({
-//                 code: 200,
-//                 message: 'SignUp Successfully',
-//                 token
-//             })
-//         }
-//     }
-//     catch (err) {
-//         res.json({
-//             code: 400,
-//             msg: 'somthing went wrong'
-//         })
-//     }
-// }
+const registerUser = async (req, res) => {
+    const { firstName, lastName, email } = req.body;
+    try {
+        const existinguser = await Employee.findOne({ email: email })
+        if (existinguser) {
+            res.json({
+                code: 201,
+                message: "User Already Exist!"
+            })
+        }
+        else {
+            const userNo = Math.floor(Math.random() * 100);
+            const username = `${firstName?.toLowerCase(/\s/g, '').replace()}${lastName ? lastName?.toLowerCase().replace(/\s/g, '') : ''}${userNo}`;
+            const hashPassword = await bcrypt.hash(password, 10);
+            const token = jwt.sign({ email }, 'secret', { expiresIn: '5h' });
+            const result = await Employee.create({
+                username,
+                designation: '',
+                email,
+                phone: '',
+                age: '',
+                password: hashPassword,
+                token
+            })
+            res.json({
+                code: 200,
+                message: 'SignUp Successfully',
+                token
+            })
+        }
+    }
+    catch (err) {
+        res.json({
+            code: 400,
+            msg: 'somthing went wrong'
+        })
+    }
+}
 
 
 const signInUser = async (req, res) => {
@@ -211,5 +211,5 @@ const signInUser = async (req, res) => {
 
 
 module.exports = {
-    index, show, update, deleteEmpolyee, signInUser
+    index, show, update, deleteEmpolyee, signInUser,registerUser
 }
