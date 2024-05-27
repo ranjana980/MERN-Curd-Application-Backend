@@ -1,7 +1,7 @@
 
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const Validation = require('../Validation/formValid')
+const Validation = require('../Validation/form-validation')
 const Employee = require('../models/employees')
 
 const index = async (req, res) => {
@@ -101,7 +101,6 @@ const show = (req, res) => {
         })
 }
 
-
 const update = (req, res) => {
     let employeeID = req.params.id
     const { designation, phone, age } = req.body
@@ -146,44 +145,43 @@ const deleteEmpolyee = (req, res) => {
 }
 
 const registerUser = async (req, res) => {
-    const { firstName, lastName, email } = req.body;
-    try {
-        const existinguser = await Employee.findOne({ email: email })
-        if (existinguser) {
+    const { username, email, password, confirmPassword } = req.body;
+    await Validation.signUpSchema.validate({ username, email, password, confirmPassword }).then(async () => {
+        try {
+            const existinguser = await Employee.findOne({ email: email })
+            if (existinguser) {
+                res.json({
+                    code: 201,
+                    message: "User Already Exist!"
+                })
+            }
+            else {
+                const hashPassword = await bcrypt.hash(password, 10);
+                const token = jwt.sign({ email }, 'secret', { expiresIn: '5h' });
+                await Employee.create({
+                    username,
+                    email,
+                    password: hashPassword,
+                    token,
+                    shortenUrl: []
+                })
+                res.json({
+                    code: 200,
+                    message: 'SignUp Successfully',
+                    token
+                })
+            }
+        }
+        catch (err) {
             res.json({
-                code: 201,
-                message: "User Already Exist!"
+                code: 400,
+                msg: 'somthing went wrong'
             })
         }
-        else {
-            const userNo = Math.floor(Math.random() * 100);
-            const username = `${firstName?.toLowerCase(/\s/g, '').replace()}${lastName ? lastName?.toLowerCase().replace(/\s/g, '') : ''}${userNo}`;
-            const hashPassword = await bcrypt.hash(password, 10);
-            const token = jwt.sign({ email }, 'secret', { expiresIn: '5h' });
-            const result = await Employee.create({
-                username,
-                designation: '',
-                email,
-                phone: '',
-                age: '',
-                password: hashPassword,
-                token
-            })
-            res.json({
-                code: 200,
-                message: 'SignUp Successfully',
-                token
-            })
-        }
-    }
-    catch (err) {
-        res.json({
-            code: 400,
-            msg: 'somthing went wrong'
-        })
-    }
-}
+    })
+        .catch(error => console.error(error.message));
 
+}
 
 const signInUser = async (req, res) => {
     const { email, password } = req.body;
@@ -209,7 +207,49 @@ const signInUser = async (req, res) => {
 
 }
 
+const deleteshortenUrl = (req, res) => {
+    let employeeID = req.params.id
+
+    Employee.findByIdAndRemove(employeeID)
+        .then(() => {
+            if (Validation.bodyValid(req.body) === true) {
+                res.json({
+                    code: 200,
+                    message: "Employee Deleted Succefully"
+                })
+            }
+            else {
+                res.json({
+                    code: 201,
+                    message: `${Validation.IdValid(req.body)}  Not Found`
+                })
+            }
+
+        })
+        .catch(error => {
+            res.json({
+                message: 'An error Occured'
+            })
+        })
+
+}
+
+const addShortenUrl = (req, res) => {
+
+}
+
+const getShortenUrl = (req, res) => {
+    let employeeID = req.params.id
+    
+    Employee.findByIdAndRemove(employeeID).then((response) => {
+        res.json({
+            code: 200,
+            shortenUrls: response?.shortenUrl
+        })
+    })
+}
 
 module.exports = {
-    index, show, update, deleteEmpolyee, signInUser,registerUser
+    index, show, update, deleteEmpolyee, signInUser, registerUser, deleteshortenUrl,
+    addShortenUrl, getShortenUrl
 }

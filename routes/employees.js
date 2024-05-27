@@ -7,4 +7,7 @@ router.post('/sign-in', EmployeeController.signInUser)
 router.get('/show/:id', EmployeeController.show)
 router.patch('/update/:id', EmployeeController.update)
 router.delete('/delete/:id', EmployeeController.deleteEmpolyee)
+router.delete('/delete-url/:id', EmployeeController.deleteshortenUrl)
+router.delete('/add-url/:id', EmployeeController.addShortenUrl)
+router.get('/get-urls/:id', EmployeeController.getShortenUrl)
 module.exports = router

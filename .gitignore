@@ -1,0 +1,16 @@
+# Dependency directories
+node_modules/
+
+# Environment variables file (e.g., .env)
+.env
+
+# Log files
+*.log
+
+# Built files (e.g., transpiled code, bundled assets)
+build/
+dist/
+
+# OS or editor-specific files
+.DS_Store
+.vscode/
