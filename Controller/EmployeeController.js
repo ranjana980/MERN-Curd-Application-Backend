@@ -1,5 +1,5 @@
 
-const bcrypt = require('bcrypt')
+const crypto = require('crypto');
 const jwt = require('jsonwebtoken')
 const Validation = require('../Validation/form-validation')
 const Employee = require('../models/employees')
@@ -156,7 +156,7 @@ const registerUser = async (req, res) => {
                 })
             }
             else {
-                const hashPassword = await bcrypt.hash(password, 10);
+                const hashPassword = await crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex'); // Hash the password
                 const token = jwt.sign({ email }, 'secret', { expiresIn: '5h' });
                 await Employee.create({
                     username,
