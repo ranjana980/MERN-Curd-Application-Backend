@@ -5,100 +5,120 @@ const Validation = require('../Validation/form-validation')
 const Employee = require('../models/employees')
 
 const index = async (req, res) => {
-    const { page, limit, search } = req.query
-    try {
-        if (page) {
-            if (limit) {
-                if (search) {
-                    const totalCount = await Employee.find({ name: search }).count()
-                    Employee.find({ name: search }).skip(parseInt(page) * limit).limit(parseInt(limit))
-                        .then(response => {
-                            res.status(200).json({
-                                code: 200,
-                                data: response,
-                                total: totalCount
-                            })
-                        })
-                        .catch(error => {
-                            res.json({
-                                message: 'An error Occured'
-                            })
-                        })
-                }
-                else {
-                    const totalCount = await Employee.find().count()
-                    Employee.find().skip(parseInt(page) * limit).limit(parseInt(limit))
-                        .then(response => {
-                            res.json({
-                                code: 200,
-                                data: response,
-                                total: totalCount
-                            })
-                        })
-                        .catch(error => {
-                            res.json({
-                                message: 'An error Occured'
-                            })
-                        })
-                }
-            }
-            else {
-                const totalCount = await Employee.find().count()
-                await Employee.find().skip(parseInt(page) * limit)
-                    .then(response => {
-                        res.json({
-                            code: 200,
-                            data: response,
-                            total: totalCount
-                        })
-                    })
-                    .catch(error => {
-                        res.json({
-                            message: 'An error Occured'
-                        })
-                    })
-            }
+    const testResponse = {
+        message: 'This is a test JSON response',
+        data: {
+          name: 'John Doe',
+          age: 30,
+          city: 'New York'
         }
-        else {
-            const totalCount = await Employee.find().count()
-            await Employee.find()
-                .then(response => {
-                    res.json({
-                        code: 200,
-                        data: response,
-                        total: totalCount
-                    })
-                })
-                .catch(error => {
-                    res.json({
-                        message: 'An error Occured'
-                    })
-                })
-        }
-    }
-    catch (err) {
-        res.status(400).json({
-            code: 400,
-            msg: 'somthing went wrong'
-        })
-    }
+      };
+    
+      res.json(testResponse);
+    // const { page, limit, search } = req.query
+    // res.json.send({message:'hello world'})
+    // try {
+    //     if (page) {
+    //         if (limit) {
+    //             if (search) {
+    //                 const totalCount = await Employee.find({ name: search }).count()
+    //                 Employee.find({ name: search }).skip(parseInt(page) * limit).limit(parseInt(limit))
+    //                     .then(response => {
+    //                         res.status(200).json({
+    //                             code: 200,
+    //                             data: response,
+    //                             total: totalCount
+    //                         })
+    //                     })
+    //                     .catch(error => {
+    //                         res.json({
+    //                             message: 'An error Occured'
+    //                         })
+    //                     })
+    //             }
+    //             else {
+    //                 const totalCount = await Employee.find().count()
+    //                 Employee.find().skip(parseInt(page) * limit).limit(parseInt(limit))
+    //                     .then(response => {
+    //                         res.json({
+    //                             code: 200,
+    //                             data: response,
+    //                             total: totalCount
+    //                         })
+    //                     })
+    //                     .catch(error => {
+    //                         res.json({
+    //                             message: 'An error Occured'
+    //                         })
+    //                     })
+    //             }
+    //         }
+    //         else {
+    //             const totalCount = await Employee.find().count()
+    //             await Employee.find().skip(parseInt(page) * limit)
+    //                 .then(response => {
+    //                     res.json({
+    //                         code: 200,
+    //                         data: response,
+    //                         total: totalCount
+    //                     })
+    //                 })
+    //                 .catch(error => {
+    //                     res.json({
+    //                         message: 'An error Occured'
+    //                     })
+    //                 })
+    //         }
+    //     }
+    //     else {
+    //         const totalCount = await Employee.find().count()
+    //         await Employee.find()
+    //             .then(response => {
+    //                 res.json({
+    //                     code: 200,
+    //                     data: response,
+    //                     total: totalCount
+    //                 })
+    //             })
+    //             .catch(error => {
+    //                 res.json({
+    //                     message: 'An error Occured'
+    //                 })
+    //             })
+    //     }
+    // }
+    // catch (err) {
+    //     res.status(400).json({
+    //         code: 400,
+    //         msg: 'somthing went wrong'
+    //     })
+    // }
 }
 
 const show = (req, res) => {
-    let employeeID = req.params.id
-    Employee.findById(employeeID)
-        .then(response => {
-            res.json({
-                code: 200,
-                message: response
-            })
-        })
-        .catch(error => {
-            res.json({
-                message: 'An error Occured!'
-            })
+    const testResponse = {
+        message: 'This is a test JSON response',
+        data: {
+          name: 'John Doe',
+          age: 30,
+          city: 'New York'
+        }
+      };
+      res.json(testResponse)
+    // let employeeID = req.params.id
+    // Employee.findById(employeeID)
+    //     .then(response => {
+    //         res.json({
+    //             code: 200,
+    //             message: response
+    //         })
+    //     })
+    //     .catch(error => {
+    //         res.json({
+    //             message: 'An error Occured!'
+    //         })
 
-        })
+    //     })
 }
 
 const update = (req, res) => {
